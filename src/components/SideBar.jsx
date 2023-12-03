@@ -1,10 +1,8 @@
-import { data } from 'autoprefixer';
 import React from 'react'
 import { useEffect, useState } from 'react';
 
-//const URL = "https://api.open-meteo.com/v1/forecast?latitude=65.01&longitude=25.47&current=temperature_2m,rain,showers,snowfall,weather_code,wind_speed_10m&hourly=temperature_2m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto";
-
-const URL = "https://api.open-meteo.com/v1/forecast?latitude=65.01&longitude=25.47&current=temperature_2m,rain,showers,snowfall,weather_code,wind_speed_10m&hourly=temperature_2m&daily=weather_code,temperature_2m_max,temperature_2m_min&wind_speed_unit=ms&timezone=auto";
+  const celsiusURL = "https://api.open-meteo.com/v1/forecast?latitude=65.01&longitude=25.47&current=temperature_2m,rain,showers,snowfall,weather_code,wind_speed_10m&hourly=temperature_2m&daily=weather_code,temperature_2m_max,temperature_2m_min&wind_speed_unit=ms&timezone=auto";
+  const fahrenheitURL = "https://api.open-meteo.com/v1/forecast?latitude=65.01&longitude=25.47&current=temperature_2m,rain,showers,snowfall,weather_code,wind_speed_10m&hourly=temperature_2m&daily=weather_code,temperature_2m_max,temperature_2m_min&wind_speed_unit=ms&temperature_unit=fahrenheit&timezone=auto";
 
 const getWeatherDescription = (code) => {
   const weatherCodes = {
@@ -47,16 +45,64 @@ const getWeatherDescription = (code) => {
   return "Unknown";
 };
 
+const getWeatherImage = (weatherCode) => {
+  switch (weatherCode) {
+    case 0:
+      return '/Images/sun.png';
+    case 1:
+      return '/Images/few_clouds.png';
+    case 2:
+      return '/Images/brokenclouds.png';
+    case 3:
+      return '/Images/scatteredclouds.png';
+    case 45:
+    case 48:
+      return '/Images/mist.png';
+    case 51:
+    case 53:
+    case 55:
+      return '/Images/showerRain.png';
+    case 56:
+    case 57:
+      return '/Images/showerRain.png';
+    case 61:
+    case 63:
+    case 65:
+      return '/Images/rain.png';
+    case 66:
+    case 67:
+      return '/Images/showerRain.png';
+    case 71:
+    case 73:
+    case 75:
+    case 77:
+      return '/Images/snow.png';
+    case 80:
+    case 81:
+    case 82:
+      return '/Images/showerRain.png';
+    case 85:
+    case 86:
+      return '/Images/snow.png';
+    case 95:
+    case 96:
+    case 99:
+      return '/Images/thunder.png';
+    default:
+      return '/Images/few_clouds.png'; 
+  }
+};
 
 
-const SideBar = () => {
+
+const SideBar = ({ selectedUnit }) => {
   const [weatherData, setWeatherData] = useState(null);
   const [currentTime, setCurrentTime] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(URL);
+        const response = await fetch(selectedUnit === 'metric' ? celsiusURL : fahrenheitURL);
 
         // response.json().then(json => {
         //   console.log(json)
@@ -74,7 +120,7 @@ const SideBar = () => {
     };
 
     fetchData();
-  }, []);
+  }, [selectedUnit]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -100,22 +146,30 @@ const SideBar = () => {
   return (
     <div className="w-80 h-5/6 bg-slate-100 rounded-xl float-left shadow-md shadow-gray-400">
       <div className="max-w-screen-lg mx-auto flex-col items-center justify-center h-full px-4">
-        {/* <div className="left-2 ml-20 text-xl font-semibold"> */}
         <div className='flex flex-col h-full mt-3'>
             <h1 className="text-lg font-semibold">Current weather</h1>
+            <div className="bg-slate-300 rounded-xl mr-16 mt-5">
+              <img style={{width: "225px", height: "225px"}} src={getWeatherImage(weatherCode)} alt="weather" className="mt-2"/>
+            </div>
+            
+            {selectedUnit === 'metric' ? (
+                  <>
+                    <h1 className="font-bold text-5xl mt-4">{temperature}°C</h1>
+                  </>
+                ) : (
+                  <>
+                    <h1 className="font-bold text-5xl mt-4">{temperature}°F</h1>
+                  </>
+                )}
 
-            <img src="/public/snow_light.png" alt="snow" className="mt-4 object-cover" />
+            <h2 className="mt-4 font-semibold text-xl">{day}, {currentTime}</h2>
 
-            <h1 className="font-bold text-5xl">{temperature}</h1>
+            <p className="text-base font-normal mt-2 mb-3">{weatherDescription}</p>
 
-            <h2 className="pt-4 font-semibold text-xl">{day}, {currentTime}</h2>
+            <hr className="text-slate-400 mt-5 text-lg bg-gray-400 h-1"/>
 
-            <p className="text-base font-normal mt-2">{weatherDescription}</p>
-
-            <hr className="text-gray-500 mt-5 text-lg bg-gray-500 h-1"/>
-
-            <div className="flex flex-row justify-start items-center">
-              <img src="/public/windy.png" alt="snow" className="mt-4 mr-2" style={{width: "35px", height: "35px"}} />
+            <div className="flex flex-row justify-start items-center mt-3">
+              <img src="/windy.png" alt="snow" className="mt-4 mr-2" style={{width: "45px", height: "45px"}} />
               <p className="text-base mt-5">Wind speed: {windSpeed} m/s</p>
             </div>
             

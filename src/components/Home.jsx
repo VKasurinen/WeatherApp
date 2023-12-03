@@ -1,8 +1,10 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 
-const URL =
-  "https://api.open-meteo.com/v1/forecast?latitude=65.01&longitude=25.47&current=temperature_2m,rain,showers,snowfall,weather_code,wind_speed_10m&hourly=temperature_2m&daily=weather_code,temperature_2m_max,temperature_2m_min&wind_speed_unit=ms&timezone=auto";
+const celsiusURL = "https://api.open-meteo.com/v1/forecast?latitude=65.01&longitude=25.47&current=temperature_2m,rain,showers,snowfall,weather_code,wind_speed_10m&hourly=temperature_2m&daily=weather_code,temperature_2m_max,temperature_2m_min&wind_speed_unit=ms&timezone=auto";
+
+const fahrenheitURL = "https://api.open-meteo.com/v1/forecast?latitude=65.01&longitude=25.47&current=temperature_2m,rain,showers,snowfall,weather_code,wind_speed_10m&hourly=temperature_2m&daily=weather_code,temperature_2m_max,temperature_2m_min&wind_speed_unit=ms&temperature_unit=fahrenheit&timezone=auto";
+
 
 const weatherCodes = {
   0: 'Clear sky',             //sun.png
@@ -79,18 +81,25 @@ const getWeatherImage = (weatherCode) => {
     case 99:
       return '/Images/thunder.png';
     default:
-      return '/Images/few_clouds.png'; 
+      return '/Images/few_clouds.png';
   }
 };
 
 
-const Home = () => {
+const Home = (props) => {
   const [weatherData, setWeatherData] = useState(null);
+  const [selectedUnit, setSelectedUnit] = useState(props.selectedUnit);
+
+  useEffect(() => {
+    setSelectedUnit(props.selectedUnit);
+  }, [props.selectedUnit]);
+
+  const selectedURL = props.selectedUnit === 'metric' ? celsiusURL : fahrenheitURL;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(URL);
+        const response = await fetch(selectedURL);
 
         if (response.ok) {
           const data = await response.json();
@@ -104,7 +113,7 @@ const Home = () => {
     };
 
     fetchData();
-  }, []);
+  }, [selectedURL]);
 
   const getDayOfWeek = (index) => {
     const today = new Date();
@@ -121,6 +130,7 @@ const Home = () => {
     }
   };
 
+
   return (
     <div className="h-5/6 w-3/4 bg-slate-100 rounded-xl float-right shadow-md shadow-gray-400">
       <div className="left-2 ml-10 mt-3">
@@ -135,19 +145,27 @@ const Home = () => {
             >
               <h1 className="font-semibold">{getDayOfWeek(index)}</h1>
 
-              <div className= " bg-neutral-200 border-1 border-blue-500 rounded-lg">
-              {/* <img src="/public/Images/sun.png" alt="snow" className="mt-2" /> */}
-              <img
+              <div className="bg-slate-300 rounded-lg">
+                <img
                   src={getWeatherImage(weatherData?.daily?.weather_code[index])}
                   alt="weather"
                   className="mt-2"
                 />
               </div>
-              
+
               <p className="text-md font-normal">{weatherCodes[weatherData?.daily?.weather_code[index]]}</p>
               <div className="flex flex-row justify-between">
-                <p className="mr-1 font-normal">{weatherData?.daily?.temperature_2m_max[index]}</p>
-                <p className="font-normal text-gray-400">{weatherData?.daily?.temperature_2m_min[index]}</p>
+                {selectedUnit === 'metric' ? (
+                  <>
+                    <p className="mr-2 font-normal">{weatherData?.daily?.temperature_2m_max[index]}°C</p>
+                    <p className="font-normal text-gray-400">{weatherData?.daily?.temperature_2m_min[index]}°C</p>
+                  </>
+                ) : (
+                  <>
+                    <p className="mr-2 font-normal">{weatherData?.daily?.temperature_2m_max[index]}°F</p>
+                    <p className="font-normal text-gray-400">{weatherData?.daily?.temperature_2m_min[index]}°F</p>
+                  </>
+                )}
               </div>
             </div>
           ))}
@@ -155,7 +173,7 @@ const Home = () => {
       ) : (
         <p>Loading...</p>
       )}
-      <hr className="my-5" />
+      <hr className="text-slate-400 mt-16 text-lg bg-gray-400 h-1"/>
     </div>
   );
 };
