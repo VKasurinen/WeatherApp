@@ -1,9 +1,35 @@
 import React from 'react'
+import { useEffect, useState } from 'react';
+
+const URL = "https://api.open-meteo.com/v1/forecast?latitude=65.01&longitude=25.47&current=temperature_2m,rain,showers,snowfall,weather_code,wind_speed_10m&hourly=temperature_2m&daily=weather_code,temperature_2m_max,temperature_2m_min&wind_speed_unit=ms&timezone=auto";
 
 
 const Home = () => {
 
-  
+  const [weatherData, setWeatherData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(URL);
+
+        // response.json().then(json => {
+        //   console.log(json)
+        // })
+
+        if (response.ok) {
+          const data = await response.json();
+          setWeatherData(data);
+        } else {
+          throw new Error('Failed to fetch data');
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
 
   return (
