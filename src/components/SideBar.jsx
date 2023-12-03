@@ -142,9 +142,9 @@ const SideBar = ({ selectedUnit }) => {
 
   const weatherDescription = getWeatherDescription(weatherCode);
 
-
+  //h-full lg:h-5/6 w-full lg:w-3/4
   return (
-    <div className="w-80 h-5/6 bg-slate-100 rounded-xl float-left shadow-md shadow-gray-400">
+    <div className="h-full lg:h-5/6 w-full lg:w-1/6 bg-slate-100 rounded-xl float-left shadow-md shadow-gray-400 mr-16">
       <div className="max-w-screen-lg mx-auto flex-col items-center justify-center h-full px-4">
         <div className='flex flex-col h-full mt-3'>
             <h1 className="text-lg font-semibold">Current weather</h1>

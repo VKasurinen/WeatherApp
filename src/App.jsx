@@ -3,6 +3,7 @@ import './App.css'
 import Header from './components/Header'
 import SideBar from './components/SideBar'
 import Home from './components/Home'
+import Chart from './components/Chart'
 
 function App() {
 
@@ -18,10 +19,13 @@ function App() {
 
 
   return (
-    <div className="h-screen w-full mt-1 py-1 px-5 bg-neutral-100">
+    <div className="mt-1 py-1 px-5 bg-neutral-100">
       <Header toggleUnit={toggleUnit} selectedUnit={selectedUnit} />
-      <SideBar selectedUnit={selectedUnit} />
-      <Home selectedUnit={selectedUnit} />
+      <div className="flex h-screen w-screen">
+        <SideBar selectedUnit={selectedUnit} />
+        <Home selectedUnit={selectedUnit} />
+      </div>
+      
       {/* <Chart/> */}
     </div>
   )

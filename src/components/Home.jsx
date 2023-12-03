@@ -1,5 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
+import Chart from './Chart';
 
 const celsiusURL = "https://api.open-meteo.com/v1/forecast?latitude=65.01&longitude=25.47&current=temperature_2m,rain,showers,snowfall,weather_code,wind_speed_10m&hourly=temperature_2m&daily=weather_code,temperature_2m_max,temperature_2m_min&wind_speed_unit=ms&timezone=auto";
 
@@ -132,16 +133,17 @@ const Home = (props) => {
 
 
   return (
-    <div className="h-5/6 w-3/4 bg-slate-100 rounded-xl float-right shadow-md shadow-gray-400">
+    // <div className="h-5/6 w-3/4 bg-slate-100 rounded-xl float-right shadow-md shadow-gray-400"></div>
+    <div className="h-full lg:h-5/6 w-full lg:w-3/4 bg-slate-100 rounded-xl float-right shadow-md shadow-gray-400">
       <div className="left-2 ml-10 mt-3">
         <h1 className='text-xl font-semibold'>Weekly highlight</h1>
       </div>
       {weatherData ? (
-        <div className="flex flex-row items-center justify-center gap-10 mt-10 ml-5">
+        <div className="flex flex-wrap flex-row items-center justify-center gap-10 mt-10 ml-5">
           {weatherData?.daily?.time.map((day, index) => (
             <div
               key={day}
-              className="flex flex-col items-center justify-center border-2 border-blue-500 rounded-lg p-2 shadow-md shadow-gray-400"
+              className="flex flex-col items-center justify-center border-2 border-blue-500 rounded-lg p-4 shadow-md shadow-gray-400"
             >
               <h1 className="font-semibold">{getDayOfWeek(index)}</h1>
 
@@ -174,6 +176,11 @@ const Home = (props) => {
         <p>Loading...</p>
       )}
       <hr className="text-slate-400 mt-16 text-lg bg-gray-400 h-1"/>
+
+      <div>
+        <Chart/>
+      </div>
+
     </div>
   );
 };
