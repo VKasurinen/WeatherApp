@@ -8,19 +8,34 @@ const URL = "https://api.open-meteo.com/v1/forecast?latitude=65.01&longitude=25.
 
 const getWeatherDescription = (code) => {
   const weatherCodes = {
-    0: "Clear sky",
-    "1, 2, 3": "Mainly clear, partly cloudy, and overcast",
-    "45, 48": "Fog and depositing rime fog",
-    "51, 53, 55": "Drizzle: Light, moderate, and dense intensity",
-    "56, 57": "Freezing Drizzle: Light and dense intensity",
-    "61, 63, 65": "Rain: Slight, moderate and heavy intensity",
-    "66, 67": "Freezing Rain: Light and heavy intensity",
-    "71, 73, 75": "Snow fall: Slight, moderate, and heavy intensity",
-    77: "Snow grains",
-    "80, 81, 82": "Rain showers: Slight, moderate, and violent",
-    "85, 86": "Snow showers slight and heavy",
-    "95": "Thunderstorm: Slight or moderate",
-    "96, 99": "Thunderstorm with slight and heavy hail",
+    0: 'Clear sky',             //sun.png
+    1: 'Mainly clear',          //few_clouds.png
+    2: 'Partly cloudy',         //brokenclouds.png
+    3: 'Overcast',              //scatteredclouds.png
+    45: 'Fog',                  //mist.png
+    48: 'Depositing rime fog',  //mist.png
+    51: 'Drizzle',
+    53: 'Drizzle',              //showerRain.png
+    55: 'Drizzle',
+    56: 'Freezing drizzle',     //showerRain.png
+    57: 'Freezing drizzle',
+    61: 'Rain',
+    63: 'Rain',                 //rain.png
+    65: 'Rain',
+    66: 'Freezing rain',
+    67: 'Freezing rain',
+    71: 'Snowfall',
+    73: 'Snowfall',             //snow.png
+    75: 'Snowfall',
+    77: 'Snow grains',
+    80: 'Rain showers',         //showerRain.png
+    81: 'Rain showers',
+    82: 'Rain showers',
+    85: 'Snow showers',         //snow.png
+    86: 'Snow showers',
+    95: 'Thunderstorm',
+    96: 'Thunderstorm',         //thunder.png
+    99: 'Thunderstorm',
   };
 
   for (const key in weatherCodes) {
@@ -95,13 +110,15 @@ const SideBar = () => {
 
             <h2 className="pt-4 font-semibold text-xl">{day}, {currentTime}</h2>
 
-            <p className="text-base font-normal mt-2">Snow {weatherDescription}</p>
+            <p className="text-base font-normal mt-2">{weatherDescription}</p>
 
             <hr className="text-gray-500 mt-5 text-lg bg-gray-500 h-1"/>
 
+            <div className="flex flex-row justify-start items-center">
+              <img src="/public/windy.png" alt="snow" className="mt-4 mr-2" style={{width: "35px", height: "35px"}} />
+              <p className="text-base mt-5">Wind speed: {windSpeed} m/s</p>
+            </div>
             
-
-            <p className="text-base mt-5">Wind speed: {windSpeed} m/s</p>
         </div>
         
 
