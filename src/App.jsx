@@ -5,6 +5,9 @@ import SideBar from './components/SideBar'
 import Home from './components/Home'
 import Chart from './components/Chart'
 
+
+
+
 function App() {
 
   //what need to be fixed:
@@ -21,12 +24,12 @@ function App() {
   return (
     <div className="mt-1 py-1 px-5 bg-neutral-100">
       <Header toggleUnit={toggleUnit} selectedUnit={selectedUnit} />
-      <div className="flex h-screen w-screen">
+
+      <div className="flex h-screen w-full lg:w-11/12">
         <SideBar selectedUnit={selectedUnit} />
         <Home selectedUnit={selectedUnit} />
       </div>
-      
-      {/* <Chart/> */}
+
     </div>
   )
 }

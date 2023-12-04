@@ -24,19 +24,18 @@ const Header = ({ toggleUnit }) => {
           className={classNames(
             'flex w-20 h-11 m-2 rounded-full transition-all duration-500 border-2 border-gray-400',
             {
-              'bg-red-200': isSelected,
               'bg-blue-200': !isSelected,
+              'bg-red-200': isSelected,
             }
           )}
-          onClick={toggleUnit}
+          onClick={handleToggle}
         >
           <span
             className={classNames(
               'h-10 w-10 bg-white rounded-full flex items-center justify-center text-lg font-semibold text-white transition-all duration-500 shadow-xl',
               {
-                'ml-10': isSelected,
-                'bg-blue-500': !isSelected,
-                'bg-red-600': isSelected,
+                'ml-10 bg-red-700': isSelected,
+                'bg-blue-700': !isSelected,
               }
             )}
           >
@@ -49,6 +48,7 @@ const Header = ({ toggleUnit }) => {
 };
 
 export default Header;
+
 
 
 

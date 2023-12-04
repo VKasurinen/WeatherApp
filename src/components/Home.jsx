@@ -2,11 +2,12 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import Chart from './Chart';
 
+
 const celsiusURL = "https://api.open-meteo.com/v1/forecast?latitude=65.01&longitude=25.47&current=temperature_2m,rain,showers,snowfall,weather_code,wind_speed_10m&hourly=temperature_2m&daily=weather_code,temperature_2m_max,temperature_2m_min&wind_speed_unit=ms&timezone=auto";
 
 const fahrenheitURL = "https://api.open-meteo.com/v1/forecast?latitude=65.01&longitude=25.47&current=temperature_2m,rain,showers,snowfall,weather_code,wind_speed_10m&hourly=temperature_2m&daily=weather_code,temperature_2m_max,temperature_2m_min&wind_speed_unit=ms&temperature_unit=fahrenheit&timezone=auto";
 
-
+// Weather codes for the weekly highlight. I didn't find from the api this directly. Like code 0 -> "Clear sky"
 const weatherCodes = {
   0: 'Clear sky',             //sun.png
   1: 'Mainly clear',          //few_clouds.png
@@ -38,6 +39,7 @@ const weatherCodes = {
   99: 'Thunderstorm',
 };
 
+//Switch case for the weather images
 const getWeatherImage = (weatherCode) => {
   switch (weatherCode) {
     case 0:
@@ -86,8 +88,14 @@ const getWeatherImage = (weatherCode) => {
   }
 };
 
+/**
+ * 
+ * @param {*} props for handling the selected unit and giving the information to Header.jsx
+ * @returns  the html for the weekly highlight with temperature, date, picture, and weather code
+ */
 
 const Home = (props) => {
+  //Use states for the weatherdata and for Celsius and fahrenheit
   const [weatherData, setWeatherData] = useState(null);
   const [selectedUnit, setSelectedUnit] = useState(props.selectedUnit);
 
@@ -95,8 +103,11 @@ const Home = (props) => {
     setSelectedUnit(props.selectedUnit);
   }, [props.selectedUnit]);
 
+  // const for the selected url
   const selectedURL = props.selectedUnit === 'metric' ? celsiusURL : fahrenheitURL;
 
+  //Use effect for fetching the data from the API
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -116,6 +127,14 @@ const Home = (props) => {
     fetchData();
   }, [selectedURL]);
 
+  
+  /**
+   * const for the date
+   * 
+   * @param {*} index 
+   * @returns day of the week with date
+   */
+
   const getDayOfWeek = (index) => {
     const today = new Date();
     const targetDay = new Date(weatherData?.daily?.time[index]);
@@ -133,17 +152,17 @@ const Home = (props) => {
 
 
   return (
-    // <div className="h-5/6 w-3/4 bg-slate-100 rounded-xl float-right shadow-md shadow-gray-400"></div>
-    <div className="h-full lg:h-5/6 w-full lg:w-3/4 bg-slate-100 rounded-xl float-right shadow-md shadow-gray-400">
+    <div className="h-full lg:h-5/6 w-full lg:w-11/12 bg-slate-100 rounded-xl float-right shadow-md shadow-gray-400">
       <div className="left-2 ml-10 mt-3">
         <h1 className='text-xl font-semibold'>Weekly highlight</h1>
       </div>
       {weatherData ? (
-        <div className="flex flex-wrap flex-row items-center justify-center gap-10 mt-10 ml-5">
+        <div className="flex flex-wrap flex-row items-center justify-center gap-10 mt-5 ml-5">
           {weatherData?.daily?.time.map((day, index) => (
             <div
               key={day}
               className="flex flex-col items-center justify-center border-2 border-blue-500 rounded-lg p-4 shadow-md shadow-gray-400"
+              style={{width: "150px"}}
             >
               <h1 className="font-semibold">{getDayOfWeek(index)}</h1>
 
@@ -175,10 +194,10 @@ const Home = (props) => {
       ) : (
         <p>Loading...</p>
       )}
-      <hr className="text-slate-400 mt-16 text-lg bg-gray-400 h-1"/>
+      <hr className="text-slate-400 mt-6 text-lg bg-gray-400 h-1"/>
 
-      <div>
-        <Chart/>
+      <div className="flex-wrap items-center justify-center h-full lg:h-3/5 w-full lg:w-4/4">
+        <Chart selectedUnit={selectedUnit}/>
       </div>
 
     </div>

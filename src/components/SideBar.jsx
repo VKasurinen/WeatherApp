@@ -144,12 +144,12 @@ const SideBar = ({ selectedUnit }) => {
 
   //h-full lg:h-5/6 w-full lg:w-3/4
   return (
-    <div className="h-full lg:h-5/6 w-full lg:w-1/6 bg-slate-100 rounded-xl float-left shadow-md shadow-gray-400 mr-16">
+    <div className="h-full lg:h-5/6 w-full lg:w-1/5 bg-slate-100 rounded-xl float-left shadow-md shadow-gray-400 mr-16">
       <div className="max-w-screen-lg mx-auto flex-col items-center justify-center h-full px-4">
         <div className='flex flex-col h-full mt-3'>
             <h1 className="text-lg font-semibold">Current weather</h1>
             <div className="bg-slate-300 rounded-xl mr-16 mt-5">
-              <img style={{width: "225px", height: "225px"}} src={getWeatherImage(weatherCode)} alt="weather" className="mt-2"/>
+              <img style={{width: "250px", height: "225px"}} src={getWeatherImage(weatherCode)} alt="weather" className="mt-2"/>
             </div>
             
             {selectedUnit === 'metric' ? (
