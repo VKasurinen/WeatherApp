@@ -94,25 +94,15 @@ const getWeatherImage = (weatherCode) => {
  * @returns  the html for the weekly highlight with temperature, date, picture, and weather code
  */
 
-const Home = (props) => {
-  //Use states for the weatherdata and for Celsius and fahrenheit
+
+const Home = ({ selectedUnit, setSelectedUnit }) => {
   const [weatherData, setWeatherData] = useState(null);
-  const [selectedUnit, setSelectedUnit] = useState(props.selectedUnit);
 
-  useEffect(() => {
-    setSelectedUnit(props.selectedUnit);
-  }, [props.selectedUnit]);
 
-  // const for the selected url
-  const selectedURL = props.selectedUnit === 'metric' ? celsiusURL : fahrenheitURL;
-
-  //Use effect for fetching the data from the API
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(selectedURL);
-
+        const response = await fetch(selectedUnit === 'metric' ? celsiusURL : fahrenheitURL);
         if (response.ok) {
           const data = await response.json();
           setWeatherData(data);
@@ -125,9 +115,9 @@ const Home = (props) => {
     };
 
     fetchData();
-  }, [selectedURL]);
+  }, [selectedUnit]);
 
-  
+
   /**
    * const for the date
    * 
@@ -152,7 +142,7 @@ const Home = (props) => {
 
 
   return (
-    <div className="h-full lg:h-5/6 w-full lg:w-11/12 bg-slate-100 rounded-xl float-right shadow-md shadow-gray-400">
+    <div className="h-full lg:h-5/6 w-full lg:w-11/12 bg-slate-100 rounded-xl shadow-md shadow-gray-400">
       <div className="left-2 ml-10 mt-3">
         <h1 className='text-xl font-semibold'>Weekly highlight</h1>
       </div>
@@ -161,12 +151,12 @@ const Home = (props) => {
           {weatherData?.daily?.time.map((day, index) => (
             <div
               key={day}
-              className="flex flex-col items-center justify-center border-2 border-blue-500 rounded-lg p-4 shadow-md shadow-gray-400"
-              style={{width: "150px"}}
+              className="flex flex-col items-center justify-center border-2 border-slate-600 rounded-lg p-4 shadow-md shadow-gray-400"
+              style={{ width: "150px" }}
             >
               <h1 className="font-semibold">{getDayOfWeek(index)}</h1>
-
-              <div className="bg-slate-300 rounded-lg">
+              {/* bg-slate-400 */}
+              <div className="bg-blue-300 rounded-lg">
                 <img
                   src={getWeatherImage(weatherData?.daily?.weather_code[index])}
                   alt="weather"
@@ -179,12 +169,12 @@ const Home = (props) => {
                 {selectedUnit === 'metric' ? (
                   <>
                     <p className="mr-2 font-normal">{weatherData?.daily?.temperature_2m_max[index]}°C</p>
-                    <p className="font-normal text-gray-400">{weatherData?.daily?.temperature_2m_min[index]}°C</p>
+                    <p className="font-normal text-gray-500">{weatherData?.daily?.temperature_2m_min[index]}°C</p>
                   </>
                 ) : (
                   <>
                     <p className="mr-2 font-normal">{weatherData?.daily?.temperature_2m_max[index]}°F</p>
-                    <p className="font-normal text-gray-400">{weatherData?.daily?.temperature_2m_min[index]}°F</p>
+                    <p className="font-normal text-gray-500">{weatherData?.daily?.temperature_2m_min[index]}°F</p>
                   </>
                 )}
               </div>
@@ -194,10 +184,11 @@ const Home = (props) => {
       ) : (
         <p>Loading...</p>
       )}
-      <hr className="text-slate-400 mt-6 text-lg bg-gray-400 h-1"/>
+      <hr className="text-slate-400 mt-6 text-lg bg-gray-400 h-1" />
 
       <div className="flex-wrap items-center justify-center h-full lg:h-3/5 w-full lg:w-4/4">
-        <Chart selectedUnit={selectedUnit}/>
+        {/* <Chart selectedUnit={selectedUnit}/> */}
+        <Chart selectedUnit={selectedUnit} setSelectedUnit={setSelectedUnit} />
       </div>
 
     </div>

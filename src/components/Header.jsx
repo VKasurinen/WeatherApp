@@ -22,7 +22,7 @@ const Header = ({ toggleUnit }) => {
       >
         <div
           className={classNames(
-            'flex w-20 h-11 m-2 rounded-full transition-all duration-500 border-2 border-gray-400',
+            'flex w-20 h-11 m-2 rounded-full transition-all duration-500 border-2 border-slate-600',
             {
               'bg-blue-200': !isSelected,
               'bg-red-200': isSelected,
@@ -32,15 +32,16 @@ const Header = ({ toggleUnit }) => {
         >
           <span
             className={classNames(
-              'h-10 w-10 bg-white rounded-full flex items-center justify-center text-lg font-semibold text-white transition-all duration-500 shadow-xl',
+              "h-10 w-10 rounded-full flex items-center justify-center text-lg font-semibold text-white transition-all duration-500 shadow-xl",
               {
-                'ml-10 bg-red-700': isSelected,
-                'bg-blue-700': !isSelected,
+                "ml-10 bg-red-600": isSelected,
+                "bg-blue-600": !isSelected,
               }
             )}
           >
             {isSelected ? '°F' : '°C'}
           </span>
+
         </div>
       </div>
     </div>
@@ -48,6 +49,9 @@ const Header = ({ toggleUnit }) => {
 };
 
 export default Header;
+
+
+
 
 
 
