@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 const celsiusURL = "https://api.open-meteo.com/v1/forecast?latitude=65.01&longitude=25.47&current=temperature_2m,rain,showers,snowfall,weather_code,wind_speed_10m&hourly=temperature_2m&daily=weather_code,temperature_2m_max,temperature_2m_min&wind_speed_unit=ms&timezone=auto";
 const fahrenheitURL = "https://api.open-meteo.com/v1/forecast?latitude=65.01&longitude=25.47&current=temperature_2m,rain,showers,snowfall,weather_code,wind_speed_10m&hourly=temperature_2m&daily=weather_code,temperature_2m_max,temperature_2m_min&wind_speed_unit=ms&temperature_unit=fahrenheit&timezone=auto";
 
+// Weather codes for the weekly highlight. I didn't find from the api this directly. Like this: weather code 0 -> "Clear sky"
 const getWeatherDescription = (code) => {
   const weatherCodes = {
     0: 'Clear sky',             //sun.png
@@ -45,6 +46,7 @@ const getWeatherDescription = (code) => {
   return "Unknown";
 };
 
+//Switch case for the weather images
 const getWeatherImage = (weatherCode) => {
   switch (weatherCode) {
     case 0:
@@ -93,20 +95,21 @@ const getWeatherImage = (weatherCode) => {
   }
 };
 
-
+/**
+ * 
+ * @param {*} param0 
+ * @returns Sidebar for current weather where is date, weather, temperature and wind speed
+ */
 
 const SideBar = ({ selectedUnit }) => {
   const [weatherData, setWeatherData] = useState(null);
   const [currentTime, setCurrentTime] = useState('');
 
+  //Use effect for fetching data from the api also checking for celcius and fahrenheit.
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(selectedUnit === 'metric' ? celsiusURL : fahrenheitURL);
-
-        // response.json().then(json => {
-        //   console.log(json)
-        // })
 
         if (response.ok) {
           const data = await response.json();
@@ -122,6 +125,7 @@ const SideBar = ({ selectedUnit }) => {
     fetchData();
   }, [selectedUnit]);
 
+//Use effect for updating current time state.
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date();
@@ -132,6 +136,7 @@ const SideBar = ({ selectedUnit }) => {
     return () => clearInterval(interval);
   }, []);
 
+  //Const for temperature, weather code, wind speed. This way we can assure that the values are not empty.
   const temperature = weatherData?.current?.temperature_2m ?? '';
   const weatherCode = weatherData?.current?.weather_code ?? '';
   const windSpeed = weatherData?.current?.wind_speed_10m ?? '';
@@ -142,33 +147,33 @@ const SideBar = ({ selectedUnit }) => {
 
   const weatherDescription = getWeatherDescription(weatherCode);
 
-  //h-full lg:h-5/6 w-full lg:w-3/4
+  
   return (
-    <div className="h-full lg:h-5/6 w-full lg:w-1/5 bg-slate-100 rounded-xl shadow-md shadow-gray-400 mr-16">
+    <div className="h-full lg:h-5/6 w-full lg:w-1/5 bg-slate-100 rounded-xl shadow-md shadow-gray-400 mr-16" data-testid="sidebar">
       <div className="max-w-screen-lg mx-auto flex-col items-center justify-center h-full px-4">
         <div className='flex flex-col h-full mt-3'>
           <h1 className="text-xl font-semibold">Current weather</h1>
           <div className="bg-blue-300 rounded-xl m-5 mt-5">
-            <img style={{ width: "250px", height: "225px" }} src={getWeatherImage(weatherCode)} alt="weather" className="mt-2" />
+            <img style={{ width: "250px", height: "225px" }} src={getWeatherImage(weatherCode)} alt="weather" className="mt-2" data-testid="weather-image" />
           </div>
 
           {selectedUnit === 'metric' ? (
             <>
-              <h1 className="font-bold text-5xl mt-4">{temperature}°C</h1>
+              <h1 className="font-bold text-5xl mt-4" data-testid="temperature">{temperature}°C</h1>
             </>
           ) : (
             <>
-              <h1 className="font-bold text-5xl mt-4">{temperature}°F</h1>
+              <h1 className="font-bold text-5xl mt-4" data-testid="temperature">{temperature}°F</h1>
             </>
           )}
 
-          <h2 className="mt-4 font-semibold text-xl">{day}, {currentTime}</h2>
+          <h2 className="mt-4 font-semibold text-xl" data-testid="current-day-time">{day}, {currentTime}</h2>
 
-          <p className="text-base font-normal mt-2 mb-3">{weatherDescription}</p>
+          <p className="text-base font-normal mt-2 mb-3" data-testid="weather-description">{weatherDescription}</p>
 
           <hr className="text-slate-400 mt-5 text-lg bg-gray-400 h-1" />
 
-          <div className="flex flex-row justify-start items-center mt-3">
+          <div className="flex flex-row justify-start items-center mt-3" data-testid="wind-speed">
             <img src="/windy.png" alt="snow" className="mt-4 mr-2" style={{ width: "45px", height: "45px" }} />
             <p className="text-base mt-5">Wind speed: {windSpeed} m/s</p>
           </div>

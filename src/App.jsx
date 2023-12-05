@@ -1,22 +1,16 @@
-import { useState } from 'react'
-import './App.css'
-import Header from './components/Header'
-import SideBar from './components/SideBar'
-import Home from './components/Home'
-
-
-
+import { useState } from "react";
+import Header from "./components/Header";
+import SideBar from "./components/SideBar";
+import Home from "./components/Home";
 
 function App() {
-
   //what need to be fixed:
-  //If user rezises the screen the home.jsx component goes below sidebar.jsx component
-  //need switch to upper right corner to switch celcius to fahrenheit
+  //The flexbox is not the best atm. Hourly chart goes below everything and its not pretty.
 
-  const [selectedUnit, setSelectedUnit] = useState('metric');
+  const [selectedUnit, setSelectedUnit] = useState("metric");
 
   const toggleUnit = () => {
-    setSelectedUnit(selectedUnit === 'metric' ? 'imperial' : 'metric');
+    setSelectedUnit(selectedUnit === "metric" ? "imperial" : "metric");
   };
 
   return (
@@ -25,12 +19,10 @@ function App() {
 
       <div className="flex flex-row flex-nowrap h-screen w-full lg:w-11/12">
         <SideBar selectedUnit={selectedUnit} />
-        {/* <Home selectedUnit={selectedUnit} /> */}
         <Home selectedUnit={selectedUnit} setSelectedUnit={setSelectedUnit} />
       </div>
-
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
