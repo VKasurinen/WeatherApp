@@ -4,20 +4,23 @@
 
 In the project directory run:
 
-### Npm install
+### "Npm install"
 Installs all the dependencies
 
-### npm run dev 
+### "Npm run dev" 
 Runs the application in development mode
 Open it on http://localhost:5173/
 
-### Testing
+## Testing
 
-Run npm run dev on your console then run npx cypress open
+Run "npm run dev" on your console then run "npx cypress open" 
+Here are links to installing and opening cypress: 
+[Installing cypress][https://docs.cypress.io/guides/getting-started/installing-cypress]
+[Opening cypress][https://docs.cypress.io/guides/getting-started/opening-the-app]
 
 After that you can run the tests on cypress. There is 4 tests available.
 
-### Screenshot
+## Screenshot
 
 Here is picture of the app
 

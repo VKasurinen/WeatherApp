@@ -55,9 +55,7 @@ const Chart = ({ selectedUnit, setSelectedUnit }) => {
   /**
    * This use effect fetches the data from the both fahrenheit and celsius API.
    *
-   *
    */
-
   useEffect(() => {
     const fetchData = async () => {
       try {

@@ -125,15 +125,20 @@ const Home = ({ selectedUnit, setSelectedUnit }) => {
    */
 
   const getDayOfWeek = (index) => {
+    //Get current date
     const today = new Date();
+    // Get the date at the specified index from the weather data
     const targetDay = new Date(weatherData?.daily?.time[index]);
 
     if (index === 0) {
       return "Today";
     } else {
       const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      // Calculate the day index for the target day
       const dayIndex = (today.getDay() + index) % 7;
+      // Create a date object from the target day
       const targetDate = new Date(targetDay);
+      // Format the targetDate to get the day and month as "Mon, Dec" for example
       const formattedDate = targetDate.toLocaleDateString("en-US", {
         day: "numeric",
         month: "short",
