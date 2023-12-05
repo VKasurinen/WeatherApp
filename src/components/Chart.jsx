@@ -56,6 +56,7 @@ const Chart = ({ selectedUnit, setSelectedUnit }) => {
    * This use effect fetches the data from the both fahrenheit and celsius API.
    *
    */
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -64,9 +65,11 @@ const Chart = ({ selectedUnit, setSelectedUnit }) => {
         );
 
         if (response.ok) {
+          // Retrieve JSON data from the response
           const data = await response.json();
           const hourlyData = data.hourly;
 
+          // Extract timestamps and convert them to date strings (short month and day format)
           const days = hourlyData.time.map((time) => {
             const date = new Date(time);
             return date.toLocaleDateString("en-US", {
@@ -74,37 +77,38 @@ const Chart = ({ selectedUnit, setSelectedUnit }) => {
               day: "numeric",
             });
           });
-
-          const temperatures = hourlyData.temperature_2m;
+          
+          const temperatures = hourlyData.temperature_2m; // Extract temperature data from the API response
 
           // Determine the min and max temperature from the fetched data
           const minTemp = Math.min(...temperatures);
           const maxTemp = Math.max(...temperatures);
 
-          // Update the chart options
-          setChartOptions((prevOptions) => ({
+          
+          setChartOptions((prevOptions) => ({  // Update the chart options
             ...prevOptions,
             yAxis: {
               ...prevOptions.yAxis,
               labels: {
-                formatter: function () {
+                formatter: function () { // Update the label formatting based on the selected unit
                   return selectedUnit === "metric"
                     ? `${this.value}°C`
                     : `${this.value}°F`;
                 },
               },
-              min: minTemp - 5,
+              // Set min and max values for the yAxis
+              min: minTemp - 5, 
               max: maxTemp + 5,
             },
             xAxis: {
               ...prevOptions.xAxis,
-              categories: days,
+              categories: days, // Set the categories for the xAxis to display days
             },
             series: [
               {
                 ...prevOptions.series[0],
                 data: temperatures,
-                color: selectedUnit === "metric" ? "blue" : "red",
+                color: selectedUnit === "metric" ? "blue" : "red", // Set the color of the chart line based on the selected unit
               },
             ],
           }));
@@ -115,15 +119,14 @@ const Chart = ({ selectedUnit, setSelectedUnit }) => {
         console.error("Error fetching data:", error);
       }
     };
-
-    fetchData();
+    fetchData(); // Call the fetchData function when the component mounts or when selectedUnit or setSelectedUnit changes
   }, [selectedUnit, setSelectedUnit]);
 
   return (
-    <div className="left-2 ml-10 mt-1">
+    <div className="left-2 ml-10 mt-2">
       <h1 className="text-xl font-semibold">Hourly Chart</h1>
 
-      <div className="mt-4 mr-10 rounded-lg overflow-hidden">
+      <div className="mt-5 mr-10 rounded-lg overflow-hidden">
         <HighchartsReact
           containerProps={{ style: { width: "100%" } }}
           highcharts={Highcharts}

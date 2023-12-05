@@ -98,14 +98,16 @@ const Home = ({ selectedUnit, setSelectedUnit }) => {
   const [weatherData, setWeatherData] = useState(null);
 
   useEffect(() => {
+    // Function to fetch weather data from the API
     const fetchData = async () => {
       try {
+        // Fetch data based on the selected unit (metric or imperial)
         const response = await fetch(
           selectedUnit === "metric" ? celsiusURL : fahrenheitURL
         );
         if (response.ok) {
-          const data = await response.json();
-          setWeatherData(data);
+          const data = await response.json();  // Retrieve JSON data from the response
+          setWeatherData(data);  // Set the fetched weather data to the 'weatherData' state
         } else {
           throw new Error("Failed to fetch data");
         }
@@ -113,8 +115,7 @@ const Home = ({ selectedUnit, setSelectedUnit }) => {
         console.error("Error fetching data:", error);
       }
     };
-
-    fetchData();
+    fetchData(); // Call the fetchData function when the component mounts or when selectedUnit or setSelectedUnit changes
   }, [selectedUnit]);
 
   /**
@@ -143,24 +144,30 @@ const Home = ({ selectedUnit, setSelectedUnit }) => {
         day: "numeric",
         month: "short",
       });
+      // Return a string combining the day name and the formatted day
       return `${daysOfWeek[dayIndex]}, ${formattedDate}`;
     }
   };
 
   return (
-    <div className="h-full lg:h-5/6 w-full lg:w-11/12 bg-slate-100 rounded-xl shadow-md shadow-gray-400" data-testid="weekly-highlight">
+    <div
+      className="flex flex-row flex-wrap h-full lg:h-5/6 w-full lg:w-11/12 ml-10 bg-slate-100 rounded-xl shadow-md shadow-gray-400"
+      data-testid="weekly-highlight"
+    >
       <div className="left-2 ml-10 mt-3">
         <h1 className="text-xl font-semibold">Weekly highlight</h1>
       </div>
       {weatherData ? (
-        <div className="flex flex-wrap flex-row items-center justify-center gap-10 mt-5 ml-5">
+        <div className="flex flex-wrap flex-row items-center justify-center gap-10 mt-3 ml-11">
           {weatherData?.daily?.time.map((day, index) => (
             <div
               key={day}
               className="flex flex-col items-center justify-center border-2 border-slate-600 rounded-lg p-4 shadow-md shadow-gray-400"
               style={{ width: "150px" }}
             >
-              <h1 className="font-semibold"data-testid={`day-${index}-name`}>{getDayOfWeek(index)}</h1>
+              <h1 className="font-semibold" data-testid={`day-${index}-name`}>
+                {getDayOfWeek(index)}
+              </h1>
               {/* bg-slate-400 */}
               <div className="bg-blue-300 rounded-lg">
                 <img
@@ -203,8 +210,11 @@ const Home = ({ selectedUnit, setSelectedUnit }) => {
       )}
       <hr className="text-slate-400 mt-6 text-lg bg-gray-400 h-1" />
 
-      <div className="flex-wrap items-center justify-center h-full lg:h-3/5 w-full lg:w-4/4" data-testid="chart">
-        <Chart selectedUnit={selectedUnit} setSelectedUnit={setSelectedUnit}/>
+      <div
+        className="flex-wrap items-center justify-center h-full lg:h-3/5 w-full lg:w-4/4"
+        data-testid="chart"
+      >
+        <Chart selectedUnit={selectedUnit} setSelectedUnit={setSelectedUnit} />
       </div>
     </div>
   );
