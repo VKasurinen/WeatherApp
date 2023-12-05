@@ -43,48 +43,48 @@ const fahrenheitURL =
 const getWeatherImage = (weatherCode) => {
   switch (weatherCode) {
     case 0:
-      return "/Images/sun.png";
+      return "/Images/weeklyImages/sun.png";
     case 1:
-      return "/Images/few_clouds.png";
+      return "/Images/weeklyImages/few_clouds.png";
     case 2:
-      return "/Images/brokenclouds.png";
+      return "/Images/weeklyImages/brokenclouds.png";
     case 3:
-      return "/Images/scatteredclouds.png";
+      return "/Images/weeklyImages/scatteredclouds.png";
     case 45:
     case 48:
-      return "/Images/mist.png";
+      return "/Images/weeklyImages/mist.png";
     case 51:
     case 53:
     case 55:
-      return "/Images/showerRain.png";
+      return "/Images/weeklyImages/showerRain.png";
     case 56:
     case 57:
-      return "/Images/showerRain.png";
+      return "/Images/weeklyImages/showerRain.png";
     case 61:
     case 63:
     case 65:
-      return "/Images/rain.png";
+      return "/Images/weeklyImages/rain.png";
     case 66:
     case 67:
-      return "/Images/showerRain.png";
+      return "/Images/weeklyImages/showerRain.png";
     case 71:
     case 73:
     case 75:
     case 77:
-      return "/Images/snow.png";
+      return "/Images/weeklyImages/snow.png";
     case 80:
     case 81:
     case 82:
-      return "/Images/showerRain.png";
+      return "/Images/weeklyImages/showerRain.png";
     case 85:
     case 86:
-      return "/Images/snow.png";
+      return "/Images/weeklyImages/snow.png";
     case 95:
     case 96:
     case 99:
-      return "/Images/thunder.png";
+      return "/Images/weeklyImages/thunder.png";
     default:
-      return "/Images/few_clouds.png";
+      return "/Images/weeklyImages/few_clouds.png";
   }
 };
 
@@ -197,7 +197,7 @@ const SideBar = ({ selectedUnit }) => {
             data-testid="wind-speed"
           >
             <img
-              src="/windy.png"
+              src="Images/windy.png"
               alt="snow"
               className="mt-4 mr-2"
               style={{ width: "45px", height: "45px" }}

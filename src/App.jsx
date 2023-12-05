@@ -7,7 +7,7 @@ function App() {
   //what need to be fixed:
   //The flexbox is not the best at the moment. Hourly chart goes below everything and its not pretty.
   //currently only the date is shown below the hour chart, I would like it to also show the hours and the date only once
-  //There could be more tests on Home.jsx
+  //There could be more tests atleast on Home.jsx
 
   const [selectedUnit, setSelectedUnit] = useState("metric");
 

@@ -1,5 +1,9 @@
 # Weather website with React.js, Vite and tailwind.css
 
+## Link to the website
+
+link here!!!!
+
 ## Available Scripts
 
 In the project directory run:
@@ -25,7 +29,7 @@ After that you can run the tests on cypress. There is 4 tests available.
 
 Here is picture of the app
 
-![WeatherApp](/public/WeatherApp.png)
+![WeatherApp](public/Images/WeatherApp.png)
 
 
 

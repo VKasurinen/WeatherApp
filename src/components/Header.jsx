@@ -20,7 +20,7 @@ const Header = ({ toggleUnit }) => {
   return (
     <div className="flex justify-between items-center w-full h-20 px-4">
       <div className="flex flex-row items-center">
-        <img src="/cloud.png" alt="sun" className="object-cover mr-1" />
+        <img src="Images/cloud.png" alt="sun" className="object-cover mr-1" />
         <h1 data-testid="cypress-title" className="text-3xl font-bold ml-2">
           Weather
         </h1>
