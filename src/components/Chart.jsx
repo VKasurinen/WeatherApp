@@ -2,13 +2,7 @@ import React, { useState, useEffect } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
-const celsiusURL =
-  "https://api.open-meteo.com/v1/forecast?latitude=65.01&longitude=25.47&current=temperature_2m,rain,showers,snowfall,weather_code,wind_speed_10m&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&wind_speed_unit=ms&timezone=auto";
-
-const fahrenheitURL =
-  "https://api.open-meteo.com/v1/forecast?latitude=65.01&longitude=25.47&current=temperature_2m,rain,showers,snowfall,weather_code,wind_speed_10m&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&wind_speed_unit=ms&timezone=auto";
-
-const Chart = ({ selectedUnit, setSelectedUnit }) => {
+const Chart = ({ selectedUnit, setSelectedUnit, weatherData }) => {
   const [chartOptions, setChartOptions] = useState({
     title: {
       text: null,
@@ -58,69 +52,53 @@ const Chart = ({ selectedUnit, setSelectedUnit }) => {
    */
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          selectedUnit === "metric" ? celsiusURL : fahrenheitURL
-        );
+    if (weatherData) {
+      const hourlyData = weatherData.hourly;
 
-        if (response.ok) {
-          // Retrieve JSON data from the response
-          const data = await response.json();
-          const hourlyData = data.hourly;
+      // Extract timestamps and convert them to date strings (short month and day format)
+      const days = hourlyData.time.map((time) => {
+        const date = new Date(time);
+        return date.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+        });
+      });
 
-          // Extract timestamps and convert them to date strings (short month and day format)
-          const days = hourlyData.time.map((time) => {
-            const date = new Date(time);
-            return date.toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-            });
-          });
-          
-          const temperatures = hourlyData.temperature_2m; // Extract temperature data from the API response
+      const temperatures = hourlyData.temperature_2m; // Extract temperature data from the API response
 
-          // Determine the min and max temperature from the fetched data
-          const minTemp = Math.min(...temperatures);
-          const maxTemp = Math.max(...temperatures);
+      // Determine the min and max temperature from the fetched data
+      const minTemp = Math.min(...temperatures);
+      const maxTemp = Math.max(...temperatures);
 
-          
-          setChartOptions((prevOptions) => ({  // Update the chart options
-            ...prevOptions,
-            yAxis: {
-              ...prevOptions.yAxis,
-              labels: {
-                formatter: function () { // Update the label formatting based on the selected unit
-                  return selectedUnit === "metric"
-                    ? `${this.value}°C`
-                    : `${this.value}°F`;
-                },
-              },
-              // Set min and max values for the yAxis
-              min: minTemp - 5, 
-              max: maxTemp + 5,
+      setChartOptions((prevOptions) => ({ // Update the chart options
+        ...prevOptions,
+        yAxis: {
+          ...prevOptions.yAxis,
+          labels: {
+            formatter: function () {  // Update the label formatting based on the selected unit
+              return selectedUnit === "metric"
+                ? `${this.value}°C`
+                : `${this.value}°F`;
             },
-            xAxis: {
-              ...prevOptions.xAxis,
-              categories: days, // Set the categories for the xAxis to display days
-            },
-            series: [
-              {
-                ...prevOptions.series[0],
-                data: temperatures,
-                color: selectedUnit === "metric" ? "blue" : "red", // Set the color of the chart line based on the selected unit
-              },
-            ],
-          }));
-        } else {
-          throw new Error("Failed to fetch data");
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData(); // Call the fetchData function when the component mounts or when selectedUnit or setSelectedUnit changes
-  }, [selectedUnit, setSelectedUnit]);
+          },
+          // Set min and max values for the yAxis
+          min: minTemp - 5,
+          max: maxTemp + 5,
+        },
+        xAxis: {
+          ...prevOptions.xAxis,
+          categories: days,
+        },
+        series: [
+          {
+            ...prevOptions.series[0],
+            data: temperatures, 
+            color: selectedUnit === "metric" ? "blue" : "red", // Set the color of the chart line based on the selected unit
+          },
+        ],
+      }));
+    }
+  }, [selectedUnit, weatherData]);
 
   return (
     <div className="left-2 ml-10 mt-2">
